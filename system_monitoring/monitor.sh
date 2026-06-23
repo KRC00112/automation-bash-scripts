@@ -32,14 +32,35 @@ function uptime(){
   echo Uptime: $sys_uptime
 }
 
-while true
-do
-  
+function active_services(){
+  service_arr=("nginx" "postgresql")
+
+  for service in ${service_arr[@]}
+  do
+    if systemctl is-active --quiet $service
+    then
+       echo -n "✓ "
+    else
+       echo -n "✗ "
+    fi
+   echo $service
+  done
+}
+
+function main(){
+  echo "=============================="
   echo User: $( whoami )
   echo Hostname: $( hostname )
-  cpu_usage
-  memory_usage
-  uptime
+  active_services
   echo "=============================="
-  sleep 1
-done
+  while true
+  do
+    cpu_usage
+    memory_usage
+    uptime
+    echo "=============================="
+    sleep 1
+  done
+}
+
+main

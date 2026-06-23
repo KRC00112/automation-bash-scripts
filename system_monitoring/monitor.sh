@@ -1,0 +1,45 @@
+#!/bin/bash
+
+function mb_to_gb(){
+  gb=$( echo "scale=2; $1/1024" | bc -l )
+  echo $gb
+}
+
+function memory_usage(){
+  memory_used=$( free -m | awk -F' ' '/Mem:/ {print $3}')
+  echo Memory Used: $( mb_to_gb $memory_used ) GB
+
+  memory_available=$( free -m | awk -F' ' '/Mem:/ {print $7}')
+  echo Memory Available: $( mb_to_gb $memory_available ) GB
+
+  memory_total=$( free -m | awk -F' ' '/Mem:/ {print $2}')
+  memory_used_pct=$( echo "scale=2; ($memory_used/$memory_total)  * 100" | bc -l )
+  echo Memory Usage: $memory_used_pct%
+
+}
+
+function cpu_usage(){
+  cpu_usage_idle=$( top -bn1 | awk -F',' '/%Cpu/ {print $4}')
+  idle_cpu_cleaned=${cpu_usage_idle:0:-3}
+  cpu_used=$( echo "scale=2; 100 - $idle_cpu_cleaned" | bc -l )
+  echo CPU Usage: $cpu_used%
+}
+
+function uptime(){
+  load_average=$( command uptime | awk -F',  ' '{print $3}' | sed 's/,/ /g; s/l/L/; s/a/A/2')
+  sys_uptime=$( command uptime | awk -F',  ' '{print $1}')
+  echo $load_average
+  echo Uptime: $sys_uptime
+}
+
+while true
+do
+  
+  echo User: $( whoami )
+  echo Hostname: $( hostname )
+  cpu_usage
+  memory_usage
+  uptime
+  echo "=============================="
+  sleep 1
+done

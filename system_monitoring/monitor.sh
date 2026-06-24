@@ -48,9 +48,12 @@ function active_services(){
 }
 
 function main(){
+  echo "SYSTEM MONITOR REPORT" 
   echo "=============================="
   echo User: $( whoami )
   echo Hostname: $( hostname )
+  echo "=============================="
+  echo "Active Services: "
   active_services
   echo "=============================="
 #  while true
@@ -63,4 +66,6 @@ function main(){
  # done
 }
 
-main
+report_date=$( date )
+main | mail -s "System Monitor Report - $report_date"  kaustav2038@gmail.com
+

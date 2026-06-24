@@ -53,14 +53,14 @@ function main(){
   echo Hostname: $( hostname )
   active_services
   echo "=============================="
-  while true
-  do
+#  while true
+ # do
     cpu_usage
     memory_usage
     uptime
     echo "=============================="
-    sleep 1
-  done
+  #  sleep 1
+ # done
 }
 
 main

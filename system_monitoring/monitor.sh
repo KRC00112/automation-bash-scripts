@@ -66,6 +66,9 @@ function main(){
  # done
 }
 
-report_date=$( date )
-main | mail -s "System Monitor Report - $report_date"  kaustav2038@gmail.com
-
+while true
+do
+  report_date=$( date )
+  main | mail -s "System Monitor Report - $report_date"  kaustav2038@gmail.com
+  sleep 3600
+done
